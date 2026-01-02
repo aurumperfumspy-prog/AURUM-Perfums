@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Aurum Perfums | Catálogo Oficial</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#0d0d0d;
+    color:#f2f2f2;
+}
+
+/* HEADER */
+header{
+    text-align:center;
+    padding:35px 15px;
+    background:linear-gradient(135deg,#111,#1c1c1c);
+}
+.logo{
+    max-width:150px;
+    margin-bottom:10px;
+}
+header h1{
+    color:#d4af37;
+    margin:5px 0;
+}
+header p{
+    color:#ccc;
+    font-size:14px;
+}
+
+header h1{
+    letter-spacing:1.5px;
+}
+
+.btn{
+    letter-spacing:0.5px;
+}
+
+.card h3{
+    letter-spacing:0.3px;
+}
+
+/* FILTERS */
+#filters{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin:20px;
+}
+#filters select{
+    padding:8px;
+    border-radius:8px;
+    border:none;
+}
+
+/* GRID */
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+.grid{ display:grid; 
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); 
+gap:20px; 
+}
+.grid {
+    margin-top: 40px; /* espacio desde el título hasta el grid */
+}
+
+/* CARD */
+.card{ position:relative; 
+background:#1a1a1a; 
+border-radius:16px;
+border:1px solid rgba(212,175,55,.25); 
+padding:15px; box-shadow:0 0 18px rgba(212,175,55,0.15); 
+transition:transform .3s;
+}
+.card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 28px rgba(212,175,55,.25);
+}
+
+.card img{
+    width:100%;
+    height:220px;
+    object-fit:contain;
+    background:#111;
+    border-radius:12px;
+    margin-bottom:12px;
+    transition:transform .4s ease;
+}
+.card:hover img{transform:scale(1.08);}
+
+.card h3{
+    color:#d4af37;
+    font-size:16px;
+    margin:5px 0;
+}
+.price{font-size:14px;margin:3px 0;}
+
+.tag{
+    position:absolute;
+    top:12px;
+    left:12px;
+    background:#d4af37;
+    color:#000;
+    font-size:11px;
+    padding:4px 8px;
+    border-radius:6px;
+    font-weight:bold;
+}
+
+/* BUTTON */
+.btn{
+    width:100%;
+    margin-top:8px;
+    padding:14px;
+    background:#d4af37;
+    color:#000;
+    border:none;
+    border-radius:12px;
+    font-weight:bold;
+    font-size:15px;
+    cursor:pointer;
+}
+
+/* COMBOS */
+.combo-section h2{
+    color:#d4af37;
+    margin-bottom:12px;
+    text-align:center;
+}
+.combo-section .grid{
+    gap:15px;
+}
+
+/* CART ICON */
+#cart-icon{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    font-size:36px;
+    background:#d4af37;
+    color:#000;
+    border-radius:50%;
+    width:60px;
+    height:60px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:1000;
+    box-shadow:0 0 12px rgba(0,0,0,0.3);
+}
+
+#cart-count{
+    position:absolute;
+    top:-5px;
+    right:-5px;
+    background:#000;
+    color:#d4af37;
+    font-size:12px;
+    font-weight:bold;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:2px solid #d4af37;
+}
+
+/* CART */
+#cart{
+    position:fixed;
+    right:20px;
+    bottom:90px;
+    width:600px;              /* MÁS ANCHO */
+    background:#1a1a1a;
+    border-radius:18px;
+    padding:15px;             /* MÁS AIRE */
+    box-shadow:0 0 25px rgba(212,175,55,0.3);
+    z-index:999;
+
+    max-height:80vh;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+}
+/* Animación carrito */
+#cart{
+    transition: all .35s ease;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+#cart.hidden{
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(15px) scale(0.97);
+}
+
+#cart h4{
+    text-align:center;
+    color:#d4af37;
+    margin:0 0 8px;
+    cursor:pointer;
+}
+#cart ul{
+    list-style:none;
+    padding:0;
+    margin:0;
+    font-size:13px;
+    max-height:180px;   /* altura fija */
+    overflow-y:auto;    /* scroll vertical */
+}
+
+/* scrollbar premium (opcional, pero recomendado) */
+#cart ul::-webkit-scrollbar{
+    width:6px;
+}
+#cart ul::-webkit-scrollbar-thumb{
+    background:#d4af37;
+    border-radius:10px;
+}
+#cart ul::-webkit-scrollbar-track{
+    background:#111;
+
+}
+#cart li{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;            /* separación horizontal */
+    margin-bottom:10px;  /* separación vertical */
+    line-height:1.4;
+}
+.remove{color:#ff5c5c;cursor:pointer;}
+#total{text-align:center;font-weight:bold;margin:8px 0;}
+
+#address{
+    width:80%;
+    padding:8px 12px;
+    border-radius:10px;
+    border:1px solid #333;
+    resize:none;
+    font-size:13px;
+    background:#111;
+    color:#eee;
+    height:20px;
+}
+
+#address::placeholder{
+    color:#777;
+    font-size:12px;
+}
+
+#cart{
+    max-height:80vh;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+}
+#total{
+    margin-top:8px;
+    font-weight:bold;
+    text-align:center;
+}
+
+/* DELIVERY INFO */
+.delivery-info{
+    background:#222;
+    padding:10px;
+    border-radius:12px;
+    margin-bottom:8px;
+    font-size:13px;
+    line-height:1.4;
+    color:#d4af37;
+    text-align:left;
+}
+
+/* CONTACTOS */
+#contacto{
+    background:#111;
+    color:#d4af37;
+    padding:20px;
+    text-align:center;
+}
+#contacto a{
+    color:#d4af37;
+    text-decoration:none;
+    font-weight:bold;
+}
+#contacto a:hover{
+    text-decoration:underline;
+}
+
+footer{
+    text-align:center;
+    padding:15px;
+    background:#0b0b0b;
+    font-size:13px;                 
+    color:#777;
+    letter-spacing:0.5px;
+}
+
+.delivery-btn{
+    width:100%;
+    margin:6px 0;
+    padding:12px;
+    border-radius:12px;
+    border:2px solid #d4af37;
+    background:transparent;
+    color:#d4af37;
+    font-weight:bold;
+    cursor:pointer;
+    transition:all .3s;
+}
+
+.delivery-btn:hover{
+    background:#d4af37;
+    color:#000;
+}
+
+.delivery-btn.active{
+    background:#d4af37;
+    color:#000;
+}
+.delivery-btn{
+    border:1px solid #555;
+    color:#ccc;
+}
+
+#toast{
+    position:fixed;
+    bottom:100px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#d4af37;
+    color:#000;
+    padding:12px 22px;
+    border-radius:30px;
+    font-weight:bold;
+    font-size:14px;
+    opacity:0;
+    pointer-events:none;
+    transition:all .4s ease;
+    z-index:2000;
+}
+
+#toast.show{
+    opacity:1;
+    bottom:120px;
+}
+
+@media (max-width:600px){
+    #cart{
+        width:92%;
+        right:4%;
+        left:4%;
+        bottom:90px;
+    }
+}
+
+@media (max-width:600px){
+    .delivery-btn, .cta-header{
+        width:100%;
+        font-size:16px;
+        padding:14px;
+    }
+}
+
+.ml-select{
+    width:100%;
+    padding:8px;
+    border-radius:10px;
+    background:#111;
+    color:#fff;
+    border:1px solid #333;
+    margin-top:8px;
+}
+
+.selected-price{
+    text-align:center;
+    margin:6px 0;
+    font-size:14px;
+    color:#d4af37;
+    min-height:18px;
+}
+
+.add-btn{
+    width:100%;
+    margin-top:6px;
+}
+
+.divider{
+    height:1px;
+    width:60%;
+    margin:40px auto;
+    background:linear-gradient(
+        to right,
+        transparent,
+        #d4af37,
+        transparent
+    );
+}
+
+.brand-story{
+    text-align:center;
+    max-width:700px;
+    margin:40px auto;
+    color:#ccc;
+}
+
+.brand-story h2{
+    color:#d4af37;
+    letter-spacing:1px;
+
+}
+.premium-header{
+    text-align:center;
+    padding:60px 20px 50px;
+    background:radial-gradient(circle at top,#1c1c1c,#0d0d0d);
+}
+
+.premium-header h1{
+    color:#d4af37;
+    font-size:36px;
+    letter-spacing:2px;
+    margin:10px 0;
+}
+
+.subtitle{
+    color:#ccc;
+    font-size:15px;
+    max-width:500px;
+    margin:10px auto 25px;
+}
+
+.header-badges{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+}
+
+.header-badges span{
+    font-size:13px;
+    border:1px solid rgba(212,175,55,.4);
+    padding:6px 14px;
+    border-radius:30px;
+    color:#d4af37;
+}
+
+.cta-header{
+    background:#d4af37;
+    color:#000;
+    border:none;
+    padding:14px 36px;
+    border-radius:40px;
+    font-weight:bold;
+    font-size:15px;
+    cursor:pointer;
+}
+
+.top-product{
+    text-align:center;
+    margin:40px 0 10px;
+    color:#d4af37;
+}
+.trust{
+    text-align:center;
+    font-size:14px;
+    color:#ccc;
+    margin:40px 0;
+}
+
+</style>
+</head>
+<body>
+<audio id="add-sound">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" type="audio/mpeg">
+</audio>
+
+<header class="premium-header">
+    <img src="logo.png" class="logo">
+
+    <h1>Aurum Perfums</h1>
+
+    <p class="subtitle">
+        Decants originales · Probá el lujo sin comprar a ciegas
+    </p>
+
+    <div class="header-badges">
+        <span>✔ Originales</span>
+        <span>🚚 Envíos rápidos y a todo el pais</span>
+        <span>⭐ +100 clientes</span>
+    </div>
+
+    <button class="cta-header" onclick="document.querySelector('.grid').scrollIntoView({behavior:'smooth'})">
+        Ver catálogo
+    </button>
+</header>
+
+<div id="filters">
+<select id="brandFilter" onchange="filterProducts()">
+<option value="all">Todas las marcas</option>
+<option>Afnan</option>
+<option>Armaf</option>
+<option>Lattafa</option>
+<option>Rasasi</option>
+<option>French Ave</option>
+<option>Valentino</option>
+<option>JPG</option>
+<option>Versace</option>
+<option>Al Haramain</option>
+</select>
+</div>
+
+<div class="divider"></div>
+
+<section class="top-product">
+<h2>🔥 Más vendido</h2>
+<p>Afnan 9PM · Ideal para salir de noche</p>
+</section>
+
+<div class="container">
+
+<div class="divider"></div>
+
+<!-- COMBOS -->
+<div class="combo-section">
+<h2>🔥 Combos Especiales</h2>
+<div class="grid">
+<div class="card" data-price="99.000">
+<h3>Combo Afnan Top</h3>
+<p style="font-size:14px;color:#ddd;margin-bottom:10px;">
+🔥 Tres perfumes top para todo el día. Fresco, nocturno y versátil.
+</p>
+<p>Incluye 5ml de: 9AM Dive + 9PM Clasico + 9PM Rebel</p>
+<p class="price">Precio especial: 99.000 Gs.</p>
+<button class="btn" onclick="addComboToCart()">Agregar Combo</button>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<h2 class="section-title">Perfumes</h2>
+
+<!-- PERFUMES -->
+<div class="grid">
+<!-- 1 -->
+<div class="card" data-brand="Afnan" data-price="43500">
+<span class="tag">Más vendido</span>
+<img src="imagesturathi-electric.jpg" alt="Afnan Turathi Electric">
+<h3>Afnan Turathi Electric</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Turathi Electric">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|45000">5 ml – 45.000 Gs</option>
+  <option value="10|70000">10 ml – 70.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 2 -->
+<div class="card" data-brand="Afnan" data-price="31500">
+<img src="images9am-dive.jpg" alt="Afnan 9AM Dive">
+<h3>Afnan 9AM Dive</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="9AM Dive">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|40000">5 ml – 40.000 Gs</option>
+  <option value="10|60000">10 ml – 60.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 3 -->
+<div class="card" data-brand="Armaf" data-price="29000">
+<img src="imagesodyssey-mandarin.jpg" alt="Armaf Odyssey Mandarin sky">
+<h3>Armaf Odyssey Mandarin sky</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Mandarin sky">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|40000">5 ml – 40.000 Gs</option>
+  <option value="10|60000">10 ml – 60.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 4 -->
+<div class="card" data-brand="French Avenue" data-price="36500">
+<img src="imagesvulcan-feu.jpg" alt="French Ave Vulcan Feu">
+<h3>French Avenue Vulcan Feu</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Vulcan Feu">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|40000">5 ml – 40.000 Gs</option>
+  <option value="10|75000">10 ml – 75.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 5 -->
+<div class="card" data-brand="French Ave" data-price="33000">
+<img src="imagesliquid-brun.jpg" alt="French Avenue Liquid Brun">
+<h3>French Avenue Liquid Brun</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Liquid Brun">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|40000">5 ml – 40.000 Gs</option>
+  <option value="10|75000">10 ml – 75.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 6 -->
+<div class="card" data-brand="Afnan" data-price="28500">
+<img src="images9pm-clasico.jpg" alt="Afnan 9PM Clasico">
+<h3>Afnan 9PM Clasico</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="9PM Clasico">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|35000">5 ml – 35.000 Gs</option>
+  <option value="10|60000">10 ml – 60.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 7 -->
+<div class="card" data-brand="Afnan" data-price="28500">
+<img src="images9pm-Rebel.jpg" alt="Afnan 9PM Rebel">
+<h3>Afnan 9PM Rebel</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="9PM Rebel">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|40000">5 ml – 40.000 Gs</option>
+  <option value="10|65000">10 ml – 65.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 8 -->
+<div class="card" data-brand="Rasasi" data-price="31500">
+<img src="imageshawasforhim.jpg" alt="Rasasi Hawas For Him">
+<h3>Rasasi Hawas For Him</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Hawas For Him">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|30000">5 ml – 35.000 Gs</option>
+  <option value="10|45000">10 ml – 45.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 9 -->
+<div class="card" data-brand="Rasasi" data-price="35500">
+<img src="imageshawas-ice.jpg" alt="Rasasi Hawas Ice">
+<h3>Rasasi Hawas Ice</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Hawas Ice">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|40000">5 ml – 40.000 Gs</option>
+  <option value="10|65000">10 ml – 65.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 10 -->
+<div class="card" data-brand="Al Haramain" data-price="43500">
+<img src="imagesdubai-night.jpg" alt="Al Haramain Amber Oud Dubai Night">
+<h3>Al Haramain Amber Oud Dubai Night</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Amber Oud Dubai Night">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|50000">5 ml – 50.000 Gs</option>
+  <option value="10|75000">10 ml – 75.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 11 -->
+<div class="card" data-brand="Armaf" data-price="39500">
+<img src="imagescdn-iconic.jpg" alt="Club de Nuit Iconic">
+<h3>Armaf Club de Nuit Iconic</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Club de Nuit Iconic">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|40000">5 ml – 40.000 Gs</option>
+  <option value="10|70000">10 ml – 70.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 12 -->
+<div class="card" data-brand="Valentino" data-price="91500">
+<img src="imagesborn-in-roma.jpg" alt="Valentino Born In Roma Intense">
+<h3>Valentino Born In Roma Intense</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Valentino Born In Roma Intense">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|90000">5 ml – 90.000 Gs</option>
+  <option value="10|175000">10 ml – 175.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 13 -->
+<div class="card" data-brand="JPG" data-price="58000">
+<img src="imagesjpgle-beau-edt.jpg" alt="Jean Paul Gaultier Le Beau">
+<h3>Jean Paul Gaultier Le Beau EDT</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Jean Paul Gaultier Le Beau EDT">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|50000">5 ml – 50.000 Gs</option>
+  <option value="10|85000">10 ml – 85.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 14 -->
+<div class="card" data-brand="Versace" data-price="42000">
+<img src="imagesversace-pour-homme.jpg" alt="Versace Pour Homme">
+<h3>Versace Pour Homme</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Versace Pour Homme">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|40000">5 ml – 40.000 Gs</option>
+  <option value="10|75000">10 ml – 75.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 15 -->
+<div class="card" data-brand="Armaf" data-price="39000">
+<img src="imagesurban-man-elixir.jpg" alt="Club de Nuit Urban Man Elixir">
+<h3>Club de Nuit Urban Man Elixir</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="CdN Urban Man Elixir">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|40000">5 ml – 40.000 Gs</option>
+  <option value="10|65000">10 ml – 65.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<!-- 16 -->
+<div class="card" data-brand="Lattafa" data-price="30000">
+<img src="imagesAsad-bourbo.jpg" alt="Asad Bourbon">
+<h3>Asad Bourbon</h3>
+<select class="ml-select"
+  onchange="updatePrice(this)"
+  data-name="Asad Bourbon">
+  
+  <option value="" disabled selected>Elegí tamaño</option>
+  <option value="5|35000">5 ml – 35.000 Gs</option>
+  <option value="10|50000">10 ml – 50.000 Gs</option>
+</select>
+
+<p class="selected-price">—</p>
+
+<button class="btn add-btn"
+  onclick="addSelectedToCart(this)">
+  Agregar al carrito
+</button>
+</div>
+
+<div id="toast">Producto agregado</div>
+
+<!-- CARRITO ICONO -->
+<div id="cart-icon" title="Tu pedido">🛒
+    <span id="cart-count">0</span>
+</div>
+
+<!-- CARRITO -->
+<div id="cart" class="hidden">
+<h4>Tu pedido</h4>
+<ul id="cart-items"></ul>
+<p id="total">Total: 0 Gs.</p>
+
+<div class="delivery-options">
+  <p style="text-align:center;color:#d4af37;font-weight:bold;margin:8px 0;">
+    Método de envío
+  </p>
+
+  <button type="button" class="delivery-btn"
+    onclick="setDelivery(this,'Delivery a toda la zona Central y alrededores')">
+    🚚 Delivery zona Central y Alrededores
+  </button>
+
+  <button type="button" class="delivery-btn"
+    onclick="setDelivery(this,'Envíos a todo el país vía transportadora')">
+    📦 Envío por Transpotadora
+  </button>
+</div>
+
+<textarea id="address" placeholder="Compartenos desde que cuidad nos escribes"></textarea>
+<button class="delivery-btn" onclick="clearCart()">
+    🗑 Vaciar carrito
+<button onclick="sendWhatsApp()" class="cta-header">
+    Finalizar pedido por WhatsApp
+</button>
+</div>
+</div>
+
+</section>
+<section class="trust">
+<p>✔ Decants originales</p>
+<p>✔ Pagás al recibir en efectivo</p>
+<p>✔ Pagos a traves de transferencias</p>
+<p>✔ Atención personalizada</p>
+<p>★★★★★ “Excelente calidad y entrega rápida”</p>
+<p>★★★★★ “Ideal para probar perfumes sin arriesgar mucho”</p>
+</section>
+
+<!-- CONTACTOS -->
+<section id="contacto" style="background:#111; color:#d4af37; padding:20px; text-align:center; border-radius:12px; margin-top:30px;">
+    <h3>📲 Contáctanos</h3>
+<p>
+    <a href="https://wa.me/595991957281" target="_blank" style="color:#d4af37; text-decoration:none; font-weight:bold; margin:0 8px;">
+         WhatsApp
+    </a> |
+    <a href="https://mail.google.com/mail/?view=cm&to=aurum.perfums.py@gmail.com" target="_blank" style="color:#d4af37; text-decoration:none; font-weight:bold; margin:0 8px;">
+        ✉️ Gmail
+    </a>
+</p>
+    <p>
+        Síguenos en redes:
+        <a href="https://www.instagram.com/aurum.perfums.py" target="_blank" style="color:#d4af37; text-decoration:none; font-weight:bold; margin:0 8px;"> Instagram</a> |
+        <a href="https://www.tiktok.com/@aurum.perfums.py" target="_blank" style="color:#d4af37; text-decoration:none; font-weight:bold; margin:0 8px;"> TikTok</a>
+    </p>
+</section>
+
+<footer>
+<p>© 2025 Aurum Perfums</p>
+<p>Decants originales · Fragancias premium</p>
+</footer>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+document.getElementById("cart-icon").addEventListener("click", ()=>{
+    document.getElementById("cart").classList.toggle("hidden");
+});
+
+function addToCart(name,size,price){
+    cart.push({name,size,price});
+    localStorage.setItem("cart",JSON.stringify(cart));
+    renderCart();
+
+    // Sonido
+    const sound = document.getElementById("add-sound");
+    if(sound) sound.play();
+
+    // Vibración (solo móvil)
+    if(navigator.vibrate){
+        navigator.vibrate(100);
+    }
+
+    showToast("Producto agregado 🛒");
+}
+
+function addComboToCart(){
+    cart.push({
+        name: "🔥 COMBO AFNAN TOP",
+        size: "Incluye 3 perfumes (5 ml c/u)",
+        price: 99000,
+        combo: true
+    });
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+}
+
+function removeItem(i){
+    cart.splice(i,1);
+    localStorage.setItem("cart",JSON.stringify(cart));
+    renderCart();
+}
+
+function updatePrice(select){
+    const priceText = select.parentElement.querySelector(".selected-price");
+
+    if(!select.value){
+        priceText.textContent = "—";
+        return;
+    }
+
+    const [ml, price] = select.value.split("|");
+    priceText.textContent = `${ml} ml – ${Number(price).toLocaleString()} Gs`;
+}
+
+function renderCart() {
+    const list = document.getElementById("cart-items");
+    const totalEl = document.getElementById("total");
+    const countEl = document.getElementById("cart-count");
+
+    list.innerHTML = ""; // Limpiar antes
+    let total = 0;
+
+    cart.forEach((item, i) => {
+        total += item.price;
+
+        list.innerHTML += `
+        <li style="display:flex; justify-content:space-between; align-items:center; padding:8px 4px; border-bottom:1px solid #333;">
+            <div>
+                ${item.combo ? "⭐ " : ""}<strong style="color:#fff;">${item.name}</strong><br>
+                <small style="color:#aaa;">${item.size}</small><br>
+                <small style="color:#d4af37; font-weight:bold;">${item.price.toLocaleString()} Gs</small>
+            </div>
+            <span class="remove" style="color:#ff5c5c; cursor:pointer; font-size:18px;" onclick="removeItem(${i})">✖</span>
+        </li>`;
+    });
+
+    // Total destacado
+    totalEl.innerHTML = `<strong style="font-size:16px; color:#d4af37;">Total: ${total.toLocaleString()} Gs</strong>`;
+    countEl.textContent = cart.length;
+
+    // Auto-scroll si hay muchos items
+    list.scrollTop = list.scrollHeight;
+}
+
+function showToast(text){
+    const toast = document.getElementById("toast");
+    toast.textContent = text;
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2000);
+}
+
+function clearCart(){
+    if(showToast("Se a vaciado el carrito")) return;
+
+    cart = [];
+    localStorage.removeItem("cart");
+    renderCart();
+}
+
+function addSelectedToCart(button){
+    const card = button.parentElement;
+    const select = card.querySelector(".ml-select");
+
+    if(!select.value){
+        showToast("Elegí un tamaño primero");
+        return;
+    }
+
+    const name = select.dataset.name;
+    const [ml, price] = select.value.split("|");
+
+    addToCart(name, ml + " ml", Number(price));
+
+    select.value = "";
+    card.querySelector(".selected-price").textContent = "—";
+}
+
+function sendWhatsApp(){
+    if(cart.length===0){
+        showToast("Tú Carrito esta vacío");
+        return;
+ }
+
+    if(!deliveryMethod){
+        showToast("Por favor, selecciona un método de envío");
+        return;
+    }
+
+    let msg="Hola, quiero realizar este pedido:";
+
+    cart.forEach(i=>{
+        msg+=`• ${i.name} (${i.size}) - ${i.price.toLocaleString()} Gs.%0A`;
+    });
+
+    const total = cart.reduce((s,i)=>s+i.price,0);
+    msg+=`Total: ${total.toLocaleString()} Gs.`;
+    msg+=`📦 Método de envío: ${deliveryMethod}`;
+
+    let ubicacion=document.getElementById("address").value.trim();
+    if(ubicacion){
+        msg+=`📍 Ubicación: ${ubicacion}`;
+    }
+
+    const numero="595991957281";
+    window.open("https://wa.me/"+numero+"?text="+msg,"_blank");
+}
+
+let deliveryMethod = "";
+
+function setDelivery(btn, method){
+    deliveryMethod = method;
+
+    document.querySelectorAll(".delivery-btn").forEach(b=>{
+        b.classList.remove("active");
+    });
+
+    btn.classList.add("active");
+}
+
+function filterProducts(){
+    const b = document.getElementById("brandFilter").value;
+    document.querySelectorAll(".card").forEach(c=>{
+        let show = true;
+        if(b !== "all" && c.dataset.brand !== b) show = false;
+        c.style.display = show ? "block" : "none";
+    });
+}
+
+
+renderCart();
+</script>
+
+</body>
+</html>
