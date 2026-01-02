@@ -202,6 +202,16 @@ transition:transform .3s;
     pointer-events: none;
     transform: translateY(15px) scale(0.97);
 }
+#close-cart{
+    position:absolute;
+    top:12px;
+    right:14px;
+    background:transparent;
+    border:none;
+    color:#d4af37;
+    font-size:22px;
+    cursor:pointer;
+}
 
 #cart h4{
     text-align:center;
@@ -357,10 +367,11 @@ footer{
 
 @media (max-width:600px){
     #cart{
-        width:92%;
-        right:4%;
-        left:4%;
-        bottom:90px;
+        width: 88%;
+        left: 6%;
+        right: 6%;
+        bottom: 90px;
+        border-radius: 20px;
     }
 }
 
@@ -476,6 +487,16 @@ footer{
     font-size:14px;
     color:#ccc;
     margin:40px 0;
+}
+#cart-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    z-index:998;
+    display:none;
+}
+#cart-overlay.show{
+    display:block;
 }
 
 </style>
@@ -898,6 +919,7 @@ footer{
 
 <!-- CARRITO -->
 <div id="cart" class="hidden">
+<button id="close-cart">✕</button>
 <h4>Tu pedido</h4>
 <ul id="cart-items"></ul>
 <p id="total">Total: 0 Gs.</p>
@@ -961,24 +983,42 @@ footer{
 </footer>
 
 <script>
+/* ======================
+   CARRITO + OVERLAY
+====================== */
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-document.getElementById("cart-icon").addEventListener("click", ()=>{
-    document.getElementById("cart").classList.toggle("hidden");
+const cartBox = document.getElementById("cart");
+const overlay = document.getElementById("cart-overlay");
+const cartIcon = document.getElementById("cart-icon");
+const closeBtn = document.getElementById("close-cart");
+
+cartIcon.addEventListener("click", () => {
+    cartBox.classList.toggle("hidden");
+    overlay.classList.toggle("show");
 });
 
-function addToCart(name,size,price){
-    cart.push({name,size,price});
-    localStorage.setItem("cart",JSON.stringify(cart));
+function closeCart(){
+    cartBox.classList.add("hidden");
+    overlay.classList.remove("show");
+}
+
+closeBtn.addEventListener("click", closeCart);
+overlay.addEventListener("click", closeCart);
+
+/* ======================
+   AGREGAR AL CARRITO
+====================== */
+function addToCart(name, size, price){
+    cart.push({ name, size, price });
+    localStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
 
-    // Sonido
     const sound = document.getElementById("add-sound");
     if(sound) sound.play();
 
-    // Vibración (solo móvil)
     if(navigator.vibrate){
-        navigator.vibrate(100);
+        navigator.vibrate(80);
     }
 
     showToast("Producto agregado 🛒");
@@ -994,72 +1034,7 @@ function addComboToCart(){
 
     localStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
-}
-
-function removeItem(i){
-    cart.splice(i,1);
-    localStorage.setItem("cart",JSON.stringify(cart));
-    renderCart();
-}
-
-function updatePrice(select){
-    const priceText = select.parentElement.querySelector(".selected-price");
-
-    if(!select.value){
-        priceText.textContent = "—";
-        return;
-    }
-
-    const [ml, price] = select.value.split("|");
-    priceText.textContent = `${ml} ml – ${Number(price).toLocaleString()} Gs`;
-}
-
-function renderCart() {
-    const list = document.getElementById("cart-items");
-    const totalEl = document.getElementById("total");
-    const countEl = document.getElementById("cart-count");
-
-    list.innerHTML = ""; // Limpiar antes
-    let total = 0;
-
-    cart.forEach((item, i) => {
-        total += item.price;
-
-        list.innerHTML += `
-        <li style="display:flex; justify-content:space-between; align-items:center; padding:8px 4px; border-bottom:1px solid #333;">
-            <div>
-                ${item.combo ? "⭐ " : ""}<strong style="color:#fff;">${item.name}</strong><br>
-                <small style="color:#aaa;">${item.size}</small><br>
-                <small style="color:#d4af37; font-weight:bold;">${item.price.toLocaleString()} Gs</small>
-            </div>
-            <span class="remove" style="color:#ff5c5c; cursor:pointer; font-size:18px;" onclick="removeItem(${i})">✖</span>
-        </li>`;
-    });
-
-    // Total destacado
-    totalEl.innerHTML = `<strong style="font-size:16px; color:#d4af37;">Total: ${total.toLocaleString()} Gs</strong>`;
-    countEl.textContent = cart.length;
-
-    // Auto-scroll si hay muchos items
-    list.scrollTop = list.scrollHeight;
-}
-
-function showToast(text){
-    const toast = document.getElementById("toast");
-    toast.textContent = text;
-    toast.classList.add("show");
-
-    setTimeout(()=>{
-        toast.classList.remove("show");
-    },2000);
-}
-
-function clearCart(){
-    if(showToast("Se a vaciado el carrito")) return;
-
-    cart = [];
-    localStorage.removeItem("cart");
-    renderCart();
+    showToast("Combo agregado ⭐");
 }
 
 function addSelectedToCart(button){
@@ -1080,60 +1055,133 @@ function addSelectedToCart(button){
     card.querySelector(".selected-price").textContent = "—";
 }
 
-function sendWhatsApp(){
-    if(cart.length===0){
-        showToast("Tú Carrito esta vacío");
-        return;
- }
+/* ======================
+   RENDER CARRITO
+====================== */
+function renderCart(){
+    const list = document.getElementById("cart-items");
+    const totalEl = document.getElementById("total");
+    const countEl = document.getElementById("cart-count");
 
-    if(!deliveryMethod){
-        showToast("Por favor, selecciona un método de envío");
-        return;
-    }
+    list.innerHTML = "";
+    let total = 0;
 
-    let msg="Hola, quiero realizar este pedido:";
+    cart.forEach((item, i) => {
+        total += item.price;
 
-    cart.forEach(i=>{
-        msg+=`• ${i.name} (${i.size}) - ${i.price.toLocaleString()} Gs.%0A`;
+        list.innerHTML += `
+        <li style="display:flex; justify-content:space-between; gap:10px; padding:8px 4px; border-bottom:1px solid #333;">
+            <div>
+                ${item.combo ? "⭐ " : ""}
+                <strong style="color:#fff;">${item.name}</strong><br>
+                <small style="color:#aaa;">${item.size}</small><br>
+                <small style="color:#d4af37; font-weight:bold;">
+                    ${item.price.toLocaleString()} Gs
+                </small>
+            </div>
+            <span class="remove" onclick="removeItem(${i})">✖</span>
+        </li>`;
     });
 
-    const total = cart.reduce((s,i)=>s+i.price,0);
-    msg+=`Total: ${total.toLocaleString()} Gs.`;
-    msg+=`📦 Método de envío: ${deliveryMethod}`;
-
-    let ubicacion=document.getElementById("address").value.trim();
-    if(ubicacion){
-        msg+=`📍 Ubicación: ${ubicacion}`;
-    }
-
-    const numero="595991957281";
-    window.open("https://wa.me/"+numero+"?text="+msg,"_blank");
+    totalEl.innerHTML = `<strong style="color:#d4af37;">Total: ${total.toLocaleString()} Gs</strong>`;
+    countEl.textContent = cart.length;
 }
 
+/* ======================
+   UTILIDADES
+====================== */
+function removeItem(i){
+    cart.splice(i,1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+}
+
+function clearCart(){
+    cart = [];
+    localStorage.removeItem("cart");
+    renderCart();
+    showToast("Carrito vaciado");
+}
+
+function updatePrice(select){
+    const priceText = select.parentElement.querySelector(".selected-price");
+    if(!select.value){
+        priceText.textContent = "—";
+        return;
+    }
+    const [ml, price] = select.value.split("|");
+    priceText.textContent = `${ml} ml – ${Number(price).toLocaleString()} Gs`;
+}
+
+function showToast(text){
+    const toast = document.getElementById("toast");
+    toast.textContent = text;
+    toast.classList.add("show");
+    setTimeout(()=> toast.classList.remove("show"), 2000);
+}
+
+/* ======================
+   DELIVERY
+====================== */
 let deliveryMethod = "";
 
 function setDelivery(btn, method){
     deliveryMethod = method;
-
-    document.querySelectorAll(".delivery-btn").forEach(b=>{
-        b.classList.remove("active");
-    });
-
+    document.querySelectorAll(".delivery-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 }
 
-function filterProducts(){
-    const b = document.getElementById("brandFilter").value;
-    document.querySelectorAll(".card").forEach(c=>{
-        let show = true;
-        if(b !== "all" && c.dataset.brand !== b) show = false;
-        c.style.display = show ? "block" : "none";
+/* ======================
+   WHATSAPP
+====================== */
+function sendWhatsApp(){
+    if(cart.length === 0){
+        showToast("Tu carrito está vacío");
+        return;
+    }
+
+    if(!deliveryMethod){
+        showToast("Seleccioná método de envío");
+        return;
+    }
+
+    let msg = "Hola, quiero realizar este pedido:%0A%0A";
+
+    cart.forEach(i => {
+        msg += `• ${i.name} (${i.size}) - ${i.price.toLocaleString()} Gs%0A`;
     });
+
+    const total = cart.reduce((s,i)=>s+i.price,0);
+    msg += `%0ATotal: ${total.toLocaleString()} Gs%0A`;
+    msg += `📦 Envío: ${deliveryMethod}%0A`;
+
+    const ubicacion = document.getElementById("address").value.trim();
+    if(ubicacion){
+        msg += `📍 Ciudad: ${ubicacion}%0A`;
+    }
+
+    const numero = "595991957281";
+    window.open(`https://wa.me/${numero}?text=${msg}`, "_blank");
+
+    closeCart();
 }
 
+/* ======================
+   FILTRO MARCAS
+====================== */
+function filterProducts(){
+    const brand = document.getElementById("brandFilter").value;
+    document.querySelectorAll(".card").forEach(card => {
+        card.style.display =
+            brand === "all" || card.dataset.brand === brand
+            ? "block"
+            : "none";
+    });
+}
 
 renderCart();
 </script>
 
+<div id="cart-overlay"></div>
 </body>
 </html>
