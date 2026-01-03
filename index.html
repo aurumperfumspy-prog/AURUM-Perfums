@@ -938,7 +938,7 @@ footer{
   </button>
 
   <button type="button" class="delivery-btn"
-    onclick="setDelivery(this,'Envíos a todo el país vía transportadora')">
+    onclick="setDelivery(this,'Envíos vía transportadora')">
     📦 Envío por Transpotadora
   </button>
 </div>
@@ -948,8 +948,8 @@ footer{
     🗑 Vaciar carrito
 </button>
 
-<button onclick="sendWhatsApp()" class="cta-header">
-    Finalizar pedido por WhatsApp
+<button class="cta-header" onclick="sendWhatsApp()">
+  Finalizar pedido por WhatsApp
 </button>
 
 </div>
@@ -987,6 +987,8 @@ footer{
 <p>© 2025 Aurum Perfums</p>
 <p>Decants originales · Fragancias premium</p>
 </footer>
+
+<div id="cart-overlay"></div>
 
 <script>
 /* ======================
@@ -1138,36 +1140,42 @@ function setDelivery(btn, method){
 }
 
 /* ======================
-   WHATSAPP
+   WHATSAPP (CORRECTO)
 ====================== */
 function sendWhatsApp(){
+    // Validar carrito vacío
     if(cart.length === 0){
-        showToast("Tu carrito está vacío");
+        showToast("Carrito vacío");
         return;
     }
 
+    // Validar que se haya seleccionado un método de envío
     if(!deliveryMethod){
-        showToast("Seleccioná método de envío");
+        showToast("Por favor, seleccioná un método de envío");
         return;
     }
 
-    let msg = "Hola, quiero realizar este pedido:%0A%0A";
+    // Crear mensaje
+    let msg = "🛍️ *Hola Aurum Perfums, quiero realizar este pedido*\n\n";
 
-    cart.forEach(i => {
-        msg += `• ${i.name} (${i.size}) - ${i.price.toLocaleString()} Gs%0A`;
+    cart.forEach(item => {
+        msg += `• ${item.name} (${item.size}) - ${item.price.toLocaleString()} Gs\n`;
     });
 
     const total = cart.reduce((s,i)=>s+i.price,0);
-    msg += `%0ATotal: ${total.toLocaleString()} Gs%0A`;
-    msg += `📦 Envío: ${deliveryMethod}%0A`;
 
-    const ubicacion = document.getElementById("address").value.trim();
-    if(ubicacion){
-        msg += `📍 Ciudad: ${ubicacion}%0A`;
+    msg += `\n💰 *Total:* ${total.toLocaleString()} Gs en Perfumes\n`;
+    msg += `📦 *Tipo Envío (Costo adicional):* ${deliveryMethod}\n`;
+
+    const city = document.getElementById("address")?.value.trim();
+    if(city){
+        msg += `📍 *Escribo desde:* ${city}\n`;
     }
 
-    const numero = "595991957281";
-    window.open(`https://wa.me/${numero}?text=${msg}`, "_blank");
+    const phone = "595991957281"; // tu número
+    const url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
+
+    window.open(url, "_blank");
 
     closeCart();
 }
@@ -1177,7 +1185,7 @@ function sendWhatsApp(){
 ====================== */
 function filterProducts(){
     const brand = document.getElementById("brandFilter").value;
-    document.querySelectorAll(".card").forEach(card => {
+    document.querySelectorAll(".card").forEach(card=>{
         card.style.display =
             brand === "all" || card.dataset.brand === brand
             ? "block"
@@ -1188,6 +1196,5 @@ function filterProducts(){
 renderCart();
 </script>
 
-<div id="cart-overlay"></div>
 </body>
 </html>
