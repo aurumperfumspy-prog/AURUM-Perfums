@@ -178,18 +178,19 @@ transition:transform .3s;
     position:fixed;
     right:20px;
     bottom:90px;
-    width:600px;              /* MÁS ANCHO */
+    width:600px;
     background:#1a1a1a;
     border-radius:18px;
-    padding:15px;             /* MÁS AIRE */
+    padding:15px;
     box-shadow:0 0 25px rgba(212,175,55,0.3);
     z-index:999;
 
-    max-height:80vh;
-    overflow:hidden;
+    max-height:70vh;          /* 👈 MENOS altura */
     display:flex;
     flex-direction:column;
+    overflow:hidden;          /* 👈 clave */
 }
+
 /* Animación carrito */
 #cart{
     transition: all .35s ease;
@@ -224,8 +225,9 @@ transition:transform .3s;
     padding:0;
     margin:0;
     font-size:13px;
-    max-height:180px;   /* altura fija */
-    overflow-y:auto;    /* scroll vertical */
+
+    max-height:200px;         /* 👈 controla el crecimiento */
+    overflow-y:auto;
 }
 
 /* scrollbar premium (opcional, pero recomendado) */
@@ -370,6 +372,8 @@ footer{
         left:12px;
         right:12px;
         bottom:90px;
+        width:auto;
+        max-height:65vh;       /* 👈 evita que invada la pantalla */
         border-radius:20px;
     }
 }
@@ -942,9 +946,12 @@ footer{
 <textarea id="address" placeholder="Compartenos desde que cuidad nos escribes"></textarea>
 <button class="delivery-btn" onclick="clearCart()">
     🗑 Vaciar carrito
+</button>
+
 <button onclick="sendWhatsApp()" class="cta-header">
     Finalizar pedido por WhatsApp
 </button>
+
 </div>
 </div>
 
