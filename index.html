@@ -403,6 +403,27 @@ footer{
     color:#d4af37;
     min-height:18px;
 }
+.old-price{
+    color:#888;
+    text-decoration:line-through;
+    font-size:13px;
+}
+
+.new-price{
+    color:#d4af37;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.discount-badge{
+    background:#d4af37;
+    color:#000;
+    font-size:11px;
+    padding:2px 6px;
+    border-radius:6px;
+    margin-left:6px;
+}
+
 
 .add-btn{
     width:100%;
@@ -501,6 +522,113 @@ footer{
 #cart-overlay.show{
     display:block;
 }
+.toggle-title{
+    text-align:center;
+    color:#d4af37;
+    cursor:pointer;
+    user-select:none;
+    margin-top:20px;
+}
+
+#perfume-section{
+    overflow:hidden;
+    transition:all .5s ease;
+}
+
+.perfume-hidden{
+    max-height:0;
+    opacity:0;
+    transform:translateY(-10px);
+    pointer-events:none;
+}
+
+.perfume-show{
+    max-height:6000px;
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:3000;
+}
+
+.modal.hidden{display:none;}
+
+.modal-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(4px);
+}
+
+.modal-box{
+  position:relative;
+  background:#0e0e0e;
+  border-radius:22px;
+  padding:20px;
+  width:90%;
+  max-width:420px;
+  text-align:center;
+  animation:modalUp .35s ease;
+  box-shadow:0 0 30px rgba(212,175,55,.25);
+}
+
+@keyframes modalUp{
+  from{transform:translateY(40px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+
+.modal-box img{
+  width:100%;
+  max-height:260px;
+  object-fit:contain;
+  border-radius:16px;
+}
+
+.modal-close{
+  position:absolute;
+  top:10px;
+  right:14px;
+  font-size:20px;
+  color:#fff;
+  cursor:pointer;
+}
+
+.modal-desc{
+  color:#bbb;
+  font-size:14px;
+  margin:10px 0;
+}
+
+.modal-price{
+  color:#d4af37;
+  font-weight:bold;
+  font-size:18px;
+  margin:10px 0;
+}
+
+.tap-hint{
+  font-size:12px;
+  color:#aaa;
+  margin-top:4px;
+  letter-spacing:.3px;
+}
+
+.card{
+  cursor:pointer;
+  transition:.3s ease;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 25px rgba(255,255,255,.06);
+}
 
 </style>
 </head>
@@ -519,9 +647,8 @@ footer{
     </p>
 
     <div class="header-badges">
-        <span>✔ Originales</span>
+        <span>✔ 100% Originales</span>
         <span>🚚 Envíos rápidos y a todo el pais</span>
-        <span>⭐ +100 clientes</span>
     </div>
 
     <button class="cta-header" onclick="document.querySelector('.grid').scrollIntoView({behavior:'smooth'})">
@@ -546,9 +673,29 @@ footer{
 
 <div class="divider"></div>
 
+<section class="brand-story">
+<h2>¿Qué es un decant?</h2>
+
+<img src="decants.jpg" style="max-width:220px;border-radius:16px;margin:15px 0;box-shadow:0 0 20px rgba(212,175,55,.4);">
+
+<p>
+Un <strong>decant</strong> es una muestra del perfume original, extraída directamente del frasco y envasada en atomizadores especiales.
+<br><br>
+👉 Te permite probar una fragancia sin comprar el frasco completo <strong>´´Compras a ciegas´´</strong>, ideal para perfumes caros o nuevos.
+<br><br>
+👉 Te permite una <strong>Variedad de fragancias</strong> y <strong>probar fragancias de lujo</strong> ahorrandote mucho dinero.
+<br><br>
+👉 Son <strong>portátiles y fáciles</strong> de llevar en viajes o bolso.
+<br><br>
+👉 Ideales para <strong>compartir o regalar</strong> a amigo, familiares.
+<br><br>
+</p>
+</section>
+
 <section class="top-product">
-<h2>🔥 Más vendido</h2>
-<p>Afnan 9PM · Ideal para salir de noche</p>
+<h2>🌟 Más vendido</h2>
+<p><strong>Afnan 9PM</strong></p>
+<p>Es el mas vendido de nuestro catalogo, ideal para salidas nocturnas, dulce, elegante y muy elogiado.</p>
 </section>
 
 <div class="container">
@@ -572,345 +719,312 @@ footer{
 
 <div class="divider"></div>
 
-<h2 class="section-title">Perfumes</h2>
+<h2 class="section-title toggle-title" onclick="togglePerfumes()">
+     Perfumes ▾
+</h2>
 
-<!-- PERFUMES -->
+<div id="perfume-section" class="perfume-hidden">
 <div class="grid">
+
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Afnan Turathi Electric",
+  img:"imagesturathi-electric.jpg",
+  desc:"Fragancia fresca, cítrica y moderna. Ideal para calor, uso diario y verano.",
+  sizes:[
+    {ml:5, price:44000},
+    {ml:10, price:72000}
+  ]
+})'>
 <!-- 1 -->
-<div class="card" data-brand="Afnan" data-price="43500">
 <span class="tag">Más vendido</span>
 <img src="imagesturathi-electric.jpg" alt="Afnan Turathi Electric">
 <h3>Afnan Turathi Electric</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Turathi Electric">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|45000">5 ml – 45.000 Gs</option>
-  <option value="10|70000">10 ml – 70.000 Gs</option>
-</select>
-
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
 
-<!-- 2 -->
-<div class="card" data-brand="Afnan" data-price="31500">
-<img src="images9am-dive.jpg" alt="Afnan 9AM Dive">
-<h3>Afnan 9AM Dive</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="9AM Dive">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|40000">5 ml – 40.000 Gs</option>
-  <option value="10|60000">10 ml – 60.000 Gs</option>
-</select>
-
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
-</div>
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Afnan 9AM Dive",
+  img:"images9am-dive.jpg",
+  desc:"Fresco, limpio y acuático. Perfecto para el día y altas temperaturas.",
+  sizes:[
+    {ml:5, price:38000},
+    {ml:10, price:58000}
+  ]
+})'>
 
 <!-- 3 -->
-<div class="card" data-brand="Armaf" data-price="29000">
-<img src="imagesodyssey-mandarin.jpg" alt="Armaf Odyssey Mandarin sky">
-<h3>Armaf Odyssey Mandarin sky</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Mandarin sky">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|40000">5 ml – 40.000 Gs</option>
-  <option value="10|60000">10 ml – 60.000 Gs</option>
-</select>
-
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<img src="images9am-dive.jpg" alt="Afnan 9AM Dive">
+<h3>Afnan 9AM Dive</h3>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
+
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Armaf Odyssey Mandarin Sky",
+  img:"imagesodyssey-mandarin.jpg",
+  desc:"Dulce, cítrico y juvenil. Llama la atención y proyecta muy bien.",
+  sizes:[
+    {ml:5, price:36000},
+    {ml:10, price:55000}
+  ]
+})'>
+
+<img src="imagesodyssey-mandarin.jpg" alt="Armaf Odyssey Mandarin sky">
+<h3>Armaf Odyssey Mandarin Sky</h3>
+<p class="tap-hint">Tocá para ver detalles</p>
+</div>
+
 
 <!-- 4 -->
-<div class="card" data-brand="French Avenue" data-price="36500">
+<div class="card"
+onclick='openPerfumeModal({
+  name:"French Avenue Vulcan Feu",
+  img:"imagesvulcan-feu.jpg",
+  desc:"Intenso, elegante y oscuro. Ideal para noche y ocasiones especiales.",
+  sizes:[
+    {ml:5, price:40000},
+    {ml:10, price:70000}
+  ]
+})'>
+
 <img src="imagesvulcan-feu.jpg" alt="French Ave Vulcan Feu">
 <h3>French Avenue Vulcan Feu</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Vulcan Feu">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|40000">5 ml – 40.000 Gs</option>
-  <option value="10|75000">10 ml – 75.000 Gs</option>
-</select>
-
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
+
 
 <!-- 5 -->
-<div class="card" data-brand="French Ave" data-price="33000">
+<div class="card"
+onclick='openPerfumeModal({
+  name:"French Avenue Liquid Brun",
+  img:"imagesliquid-brun.jpg",
+  desc:"Dulce, cremoso y adictivo. Muy usado para noches y citas.",
+  sizes:[
+    {ml:5, price:38000},
+    {ml:10, price:63000}
+  ]
+})'>
+
 <img src="imagesliquid-brun.jpg" alt="French Avenue Liquid Brun">
 <h3>French Avenue Liquid Brun</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Liquid Brun">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|40000">5 ml – 40.000 Gs</option>
-  <option value="10|75000">10 ml – 75.000 Gs</option>
-</select>
-
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
 
+
 <!-- 6 -->
-<div class="card" data-brand="Afnan" data-price="28500">
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Afnan 9PM Clásico",
+  img:"images9pm-clasico.jpg",
+  desc:"Dulce, avainillado y nocturno. Uno de los más elogiados.",
+  sizes:[
+    {ml:5, price:35000},
+    {ml:10, price:58000}
+  ]
+})'>
+
 <img src="images9pm-clasico.jpg" alt="Afnan 9PM Clasico">
-<h3>Afnan 9PM Clasico</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="9PM Clasico">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|35000">5 ml – 35.000 Gs</option>
-  <option value="10|60000">10 ml – 60.000 Gs</option>
-</select>
-
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<h3>Afnan 9PM Clásico</h3>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
 
 <!-- 7 -->
-<div class="card" data-brand="Afnan" data-price="28500">
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Afnan 9PM Rebel",
+  img:"images9pm-Rebel.jpg",
+  desc:"Dulce, aromático y moderno. Ideal para noche, salidas y climas frescos. Un perfume juvenil con muy buena duración.",
+  sizes:[
+    {ml:5, price:38000},
+    {ml:10, price:60000}
+  ]
+})'>
+
 <img src="images9pm-Rebel.jpg" alt="Afnan 9PM Rebel">
 <h3>Afnan 9PM Rebel</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="9PM Rebel">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|40000">5 ml – 40.000 Gs</option>
-  <option value="10|65000">10 ml – 65.000 Gs</option>
-</select>
+<p class="tap-hint">Tocá para ver detalles</p>
 
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
 </div>
 
 <!-- 8 -->
-<div class="card" data-brand="Rasasi" data-price="31500">
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Rasasi Hawas For Him",
+  img:"imageshawasforhim.jpg",
+  desc:"Acuático, dulce y muy llamativo. Uno de los más elogiados para calor.",
+  sizes:[
+    {ml:5, price:35000},
+    {ml:10, price:50000}
+  ]
+})'>
+
 <img src="imageshawasforhim.jpg" alt="Rasasi Hawas For Him">
 <h3>Rasasi Hawas For Him</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Hawas For Him">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|30000">5 ml – 35.000 Gs</option>
-  <option value="10|45000">10 ml – 45.000 Gs</option>
-</select>
-
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
+
 
 <!-- 9 -->
-<div class="card" data-brand="Rasasi" data-price="35500">
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Rasasi Hawas Ice",
+  img:"imageshawas-ice.jpg",
+  desc:"Más fresco y limpio que Hawas clásico. Elegante y versátil.",
+  sizes:[
+    {ml:5, price:40000, old:52000},
+    {ml:10, price:60000, old:78000}
+  ]
+})'>
+
 <img src="imageshawas-ice.jpg" alt="Rasasi Hawas Ice">
 <h3>Rasasi Hawas Ice</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Hawas Ice">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|40000">5 ml – 40.000 Gs</option>
-  <option value="10|65000">10 ml – 65.000 Gs</option>
-</select>
-
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
 
+
 <!-- 10 -->
-<div class="card" data-brand="Al Haramain" data-price="43500">
-<img src="imagesdubai-night.jpg" alt="Al Haramain Amber Oud Dubai Night">
-<h3>Al Haramain Amber Oud Dubai Night</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Amber Oud Dubai Night">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|50000">5 ml – 50.000 Gs</option>
-  <option value="10|75000">10 ml – 75.000 Gs</option>
-</select>
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Al Haramain Amber Oud Dubai Night",
+  img:"imagesdubai-night.jpg",
+  desc:"Oscuro, dulce y lujoso. Muy potente para noches especiales.",
+  sizes:[
+    {ml:5, price:48000, old:52000},
+    {ml:10, price:70000}
+  ]
+})'>
 
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<img src="imagesdubai-night.jpg" alt="Amber Oud Dubai Night">
+<h3>Amber Oud Dubai Night</h3>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
 
 <!-- 11 -->
-<div class="card" data-brand="Armaf" data-price="39500">
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Armaf Club de Nuit Iconic",
+  img:"imagescdn-iconic.jpg",
+  desc:"Fresco, cremoso y elegante. Estilo Bleu de Chanel.",
+  sizes:[
+    {ml:5, price:40000},
+    {ml:10, price:68000}
+  ]
+})'>
+
 <img src="imagescdn-iconic.jpg" alt="Club de Nuit Iconic">
 <h3>Armaf Club de Nuit Iconic</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Club de Nuit Iconic">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|40000">5 ml – 40.000 Gs</option>
-  <option value="10|70000">10 ml – 70.000 Gs</option>
-</select>
-
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
 
 <!-- 12 -->
-<div class="card" data-brand="Valentino" data-price="91500">
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Valentino Born In Roma Intense",
+  img:"imagesborn-in-roma.jpg",
+  desc:"Dulce, moderno y sensual. Aroma de diseñador premium.",
+  sizes:[
+    {ml:5, price:89000},
+    {ml:10, price:173000}
+  ]
+})'>
+
 <img src="imagesborn-in-roma.jpg" alt="Valentino Born In Roma Intense">
 <h3>Valentino Born In Roma Intense</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Valentino Born In Roma Intense">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|90000">5 ml – 90.000 Gs</option>
-  <option value="10|175000">10 ml – 175.000 Gs</option>
-</select>
-
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
 
 <!-- 13 -->
-<div class="card" data-brand="JPG" data-price="58000">
-<img src="imagesjpgle-beau-edt.jpg" alt="Jean Paul Gaultier Le Beau">
-<h3>Jean Paul Gaultier Le Beau EDT</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Jean Paul Gaultier Le Beau EDT">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|50000">5 ml – 50.000 Gs</option>
-  <option value="10|85000">10 ml – 85.000 Gs</option>
-</select>
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Jean Paul Gaultier Le Beau EDT",
+  img:"imagesjpgle-beau-edt.jpg",
+  desc:"Coco, dulce y fresco. Muy atractivo y juvenil.",
+  sizes:[
+    {ml:5, price:49000},
+    {ml:10, price:84000}
+  ]
+})'>
 
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<img src="imagesjpgle-beau-edt.jpg" alt="JPG Le Beau EDT">
+<h3>JPG Le Beau EDT</h3>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
 
 <!-- 14 -->
-<div class="card" data-brand="Versace" data-price="42000">
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Versace Pour Homme",
+  img:"imagesversace-pour-homme.jpg",
+  desc:"Clásico limpio y fresco. Ideal para oficina y uso diario.",
+  sizes:[
+    {ml:5, price:44000},
+    {ml:10, price:74000}
+  ]
+})'>
+
 <img src="imagesversace-pour-homme.jpg" alt="Versace Pour Homme">
 <h3>Versace Pour Homme</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Versace Pour Homme">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|40000">5 ml – 40.000 Gs</option>
-  <option value="10|75000">10 ml – 75.000 Gs</option>
-</select>
-
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
 
 <!-- 15 -->
-<div class="card" data-brand="Armaf" data-price="39000">
-<img src="imagesurban-man-elixir.jpg" alt="Club de Nuit Urban Man Elixir">
-<h3>Club de Nuit Urban Man Elixir</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="CdN Urban Man Elixir">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|40000">5 ml – 40.000 Gs</option>
-  <option value="10|65000">10 ml – 65.000 Gs</option>
-</select>
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Club de Nuit Urban Man Elixir",
+  img:"imagesurban-man-elixir.jpg",
+  desc:"Intenso, masculino y moderno. Muy buen rendimiento.",
+  sizes:[
+    {ml:5, price:40000},
+    {ml:10, price:65000}
+  ]
+})'>
 
-<p class="selected-price">—</p>
-
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+<img src="imagesurban-man-elixir.jpg" alt="Urban Man Elixir">
+<h3>Urban Man Elixir</h3>
+<p class="tap-hint">Tocá para ver detalles</p>
 </div>
 
 <!-- 16 -->
-<div class="card" data-brand="Lattafa" data-price="30000">
+<div class="card"
+onclick='openPerfumeModal({
+  name:"Lattafa Asad Bourbon",
+  img:"imagesAsad-bourbo.jpg",
+  desc:"Dulce, especiado y elegante. Excelente para noche.",
+  sizes:[
+    {ml:5, price:33000},
+    {ml:10, price:47000}
+  ]
+})'>
+
 <img src="imagesAsad-bourbo.jpg" alt="Asad Bourbon">
-<h3>Asad Bourbon</h3>
-<select class="ml-select"
-  onchange="updatePrice(this)"
-  data-name="Asad Bourbon">
-  
-  <option value="" disabled selected>Elegí tamaño</option>
-  <option value="5|35000">5 ml – 35.000 Gs</option>
-  <option value="10|50000">10 ml – 50.000 Gs</option>
-</select>
+<h3>Lattafa Asad Bourbon</h3>
+<p class="tap-hint">Tocá para ver detalles</p>
+</div>
+</div> <!-- cierre .grid -->
+</div> <!-- cierre #perfume-section -->
 
-<p class="selected-price">—</p>
+<!-- MODAL PERFUME -->
+<div id="perfume-modal" class="modal hidden">
+  <div class="modal-overlay" onclick="closePerfumeModal()"></div>
 
-<button class="btn add-btn"
-  onclick="addSelectedToCart(this)">
-  Agregar al carrito
-</button>
+  <div class="modal-box">
+    <span class="modal-close" onclick="closePerfumeModal()">✖</span>
+
+    <img id="modal-img" src="" alt="perfume">
+
+    <h2 id="modal-name"></h2>
+    <p id="modal-desc" class="modal-desc"></p>
+
+    <select id="modal-ml" class="ml-select" onchange="updateModalPrice()">
+      <option value="">Elegí tamaño</option>
+    </select>
+
+    <p id="modal-price" class="modal-price">—</p>
+
+    <button class="btn" onclick="addModalToCart()">Agregar al carrito</button>
+  </div>
 </div>
 
 <div id="toast">Producto agregado</div>
@@ -927,22 +1041,6 @@ footer{
 <ul id="cart-items"></ul>
 <p id="total">Total: 0 Gs.</p>
 
-<div class="delivery-options">
-  <p style="text-align:center;color:#d4af37;font-weight:bold;margin:8px 0;">
-    Método de envío
-  </p>
-
-  <button type="button" class="delivery-btn"
-    onclick="setDelivery(this,'Delivery a toda la zona Central y alrededores')">
-    🚚 Delivery zona Central y Alrededores
-  </button>
-
-  <button type="button" class="delivery-btn"
-    onclick="setDelivery(this,'Envíos vía transportadora')">
-    📦 Envío por Transpotadora
-  </button>
-</div>
-
 <textarea id="address" placeholder="Compartenos desde que cuidad nos escribes"></textarea>
 <button class="delivery-btn" onclick="clearCart()">
     🗑 Vaciar carrito
@@ -954,22 +1052,22 @@ footer{
 
 </div>
 </div>
-
+<div class="divider"></div>
 </section>
 <section class="trust">
 <p>✔ Decants originales</p>
 <p>✔ Pagás al recibir en efectivo</p>
 <p>✔ Pagos a traves de transferencias</p>
 <p>✔ Atención personalizada</p>
-<p>★★★★★ “Excelente calidad y entrega rápida”</p>
-<p>★★★★★ “Ideal para probar perfumes sin arriesgar mucho”</p>
+<p>✔ Ideal para probar perfumes sin arriesgar mucho
+<p>★★★★★ “Entrega en el día según disponibilidad (máximo 2 días)”</p>
 </section>
 
 <!-- CONTACTOS -->
 <section id="contacto" style="background:#111; color:#d4af37; padding:20px; text-align:center; border-radius:12px; margin-top:30px;">
     <h3>📲 Contáctanos</h3>
 <p>
-    <a href="https://wa.me/595991957281" target="_blank" style="color:#d4af37; text-decoration:none; font-weight:bold; margin:0 8px;">
+    <a href="https://wa.me/595991697906" target="_blank" style="color:#d4af37; text-decoration:none; font-weight:bold; margin:0 8px;">
          WhatsApp
     </a> |
     <a href="https://mail.google.com/mail/?view=cm&to=aurum.perfums.py@gmail.com" target="_blank" style="color:#d4af37; text-decoration:none; font-weight:bold; margin:0 8px;">
@@ -1112,13 +1210,26 @@ function clearCart(){
 }
 
 function updatePrice(select){
-    const priceText = select.parentElement.querySelector(".selected-price");
+    const priceBox = select.parentElement.querySelector(".selected-price");
+
     if(!select.value){
-        priceText.textContent = "—";
+        priceBox.textContent = "—";
         return;
     }
-    const [ml, price] = select.value.split("|");
-    priceText.textContent = `${ml} ml – ${Number(price).toLocaleString()} Gs`;
+
+    const [ml, price, oldPrice] = select.value.split("|");
+
+    if(oldPrice){
+        const discount = Math.round(100 - (price / oldPrice * 100));
+
+        priceBox.innerHTML = `
+          <span class="old-price">${Number(oldPrice).toLocaleString()} Gs</span><br>
+          <span class="new-price">${Number(price).toLocaleString()} Gs</span>
+          <span class="discount-badge">-${discount}%</span>
+        `;
+    }else{
+        priceBox.innerHTML = `<span class="new-price">${Number(price).toLocaleString()} Gs</span>`;
+    }
 }
 
 function showToast(text){
@@ -1128,16 +1239,12 @@ function showToast(text){
     setTimeout(()=> toast.classList.remove("show"), 2000);
 }
 
-/* ======================
-   DELIVERY
-====================== */
-let deliveryMethod = "";
-
-function setDelivery(btn, method){
-    deliveryMethod = method;
-    document.querySelectorAll(".delivery-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
+function togglePerfumes(){
+    const section = document.getElementById("perfume-section");
+    section.classList.toggle("perfume-show");
+    section.classList.toggle("perfume-hidden");
 }
+
 
 /* ======================
    WHATSAPP (CORRECTO)
@@ -1146,12 +1253,6 @@ function sendWhatsApp(){
     // Validar carrito vacío
     if(cart.length === 0){
         showToast("Carrito vacío");
-        return;
-    }
-
-    // Validar que se haya seleccionado un método de envío
-    if(!deliveryMethod){
-        showToast("Por favor, seleccioná un método de envío");
         return;
     }
 
@@ -1165,14 +1266,13 @@ function sendWhatsApp(){
     const total = cart.reduce((s,i)=>s+i.price,0);
 
     msg += `\n💰 *Total:* ${total.toLocaleString()} Gs en Perfumes\n`;
-    msg += `📦 *Tipo Envío (Costo adicional):* ${deliveryMethod}\n`;
 
     const city = document.getElementById("address")?.value.trim();
     if(city){
         msg += `📍 *Escribo desde:* ${city}\n`;
     }
 
-    const phone = "595991957281"; // tu número
+    const phone = "595991697906"; // tu número
     const url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
 
     window.open(url, "_blank");
@@ -1195,6 +1295,70 @@ function filterProducts(){
 
 renderCart();
 </script>
+<script>
+let currentPerfume = null;
 
+function openPerfumeModal(data){
+  currentPerfume = data;
+
+  document.getElementById("modal-img").src = data.img;
+  document.getElementById("modal-name").textContent = data.name;
+  document.getElementById("modal-desc").textContent = data.desc;
+
+  const select = document.getElementById("modal-ml");
+  select.innerHTML = '<option value="">Elegí tamaño</option>';
+
+data.sizes.forEach(s=>{
+  select.innerHTML += `<option value="${s.ml}|${s.price}|${s.old}">
+    ${s.ml} ml
+  </option>`;
+});
+
+  document.getElementById("modal-price").textContent = "—";
+  document.getElementById("perfume-modal").classList.remove("hidden");
+}
+
+function closePerfumeModal(){
+  document.getElementById("perfume-modal").classList.add("hidden");
+}
+
+function updateModalPrice(){
+  const val = document.getElementById("modal-ml").value;
+  const priceBox = document.getElementById("modal-price");
+
+  if(!val){
+    priceBox.textContent = "—";
+    return;
+  }
+
+  const [ml, price, oldPrice] = val.split("|");
+  const priceNum = Number(price);
+  const oldNum = Number(oldPrice);
+
+  if(oldNum){
+    const discount = Math.round(100 - (priceNum / oldNum * 100));
+
+    priceBox.innerHTML = `
+      <span class="old-price">${oldNum.toLocaleString()} Gs</span><br>
+      <span class="new-price">${priceNum.toLocaleString()} Gs</span>
+      <span class="discount-badge">-${discount}%</span>
+    `;
+  } else {
+    priceBox.innerHTML =
+      `<span class="new-price">${priceNum.toLocaleString()} Gs</span>`;
+  }
+}
+
+function addModalToCart(){
+  const val = document.getElementById("modal-ml").value;
+  if(!val){
+    showToast("Elegí un tamaño");
+    return;
+  }
+  const [ml, price] = val.split("|");
+  addToCart(currentPerfume.name, ml + " ml", Number(price));
+  closePerfumeModal();
+}
+</script>
 </body>
 </html>
